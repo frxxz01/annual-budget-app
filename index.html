@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>年度记账软件</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- 顶部控制区 -->
+    <div class="top-controls">
+      <button id="income-btn" class="control-btn">收入</button>
+      <button id="expense-btn" class="control-btn">支出</button>
+      <select id="month-select" class="month-select">
+        <option value="1">1月</option>
+        <option value="2">2月</option>
+        <option value="3">3月</option>
+        <option value="4">4月</option>
+        <option value="5">5月</option>
+        <option value="6">6月</option>
+        <option value="7">7月</option>
+        <option value="8">8月</option>
+        <option value="9">9月</option>
+        <option value="10">10月</option>
+        <option value="11">11月</option>
+        <option value="12">12月</option>
+      </select>
+    </div>
+
+    <!-- 主体区 -->
+    <div class="main-content">
+      <div class="charts">
+        <canvas id="monthly-chart"></canvas>
+        <canvas id="yearly-chart"></canvas>
+      </div>
+      <div class="record-list">
+        <ul id="record-list">
+          <!-- 记录内容会通过JS加载 -->
+        </ul>
+        <button id="show-more-btn">查看更多记录</button>
+      </div>
+    </div>
+
+    <!-- 年历 -->
+    <div class="calendar">
+      <div id="calendar"></div>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
