@@ -1,3 +1,4 @@
+
 // 图表数据
 let monthlyData = {
   income: [100, 200, 300, 150, 250, 300, 350, 400, 450, 500, 550, 600],
@@ -45,20 +46,21 @@ function updateCharts() {
   });
 }
 
-// 处理月份和类型切换
-document.getElementById('month-select').addEventListener('change', (e) => {
-  selectedMonth = parseInt(e.target.value);
-  updateCharts();
-});
-
+// 处理收入/支出的按钮点击事件
 document.getElementById('income-btn').addEventListener('click', () => {
   selectedType = 'income';
-  updateCharts();
+  updateCharts(); // 更新图表
 });
 
 document.getElementById('expense-btn').addEventListener('click', () => {
   selectedType = 'expense';
-  updateCharts();
+  updateCharts(); // 更新图表
+});
+
+// 处理月份选择
+document.getElementById('month-select').addEventListener('change', (e) => {
+  selectedMonth = parseInt(e.target.value); // 获取选中的月份
+  updateCharts(); // 更新图表
 });
 
 // 初始化
