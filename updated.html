@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>年度记账本</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+    h2 { margin: 20px 0; text-align: center; }
+    .flex { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; margin-bottom: 20px; }
+    label, select, input, button { padding: 8px 16px; margin: 5px; border-radius: 6px; }
+    button { cursor: pointer; border: 1px solid #ccc; background-color: #f9f9f9; }
+    button:hover { background-color: #e0e0e0; }
+    #monthPagination { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+    #monthPagination button { border: 1px solid #ccc; background-color: #f9f9f9; border-radius: 6px; }
+    #monthPagination button.active { background-color: #4caf50; color: white; font-weight: bold; }
+    .charts { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    .card { padding: 16px; border: 1px solid #ddd; border-radius: 8px; background-color: white; }
+    .card h3 { margin-bottom: 10px; font-size: 16px; }
+    .tip { font-size: 12px; color: #666; }
+    .hidden { display: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #f4f4f4; }
+    .income { color: green; font-weight: bold; }
+    .expense { color: red; font-weight: bold; }
+    #summary { margin-top: 12px; font-size: 16px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>📒 年度记账本</h2>
+
+  <!-- 顶部吸顶工具条 -->
+  <div id="monthPagination"></div>
+
+  <!-- 录入区域 -->
+  <div class="flex">
+    <label>账本（人）:
+      <select id="profileSelect" onchange="switchProfile()"></select>
+    </label>
+    <button onclick="createProfile()">新增账本</button>
+    <button onclick="renameProfilePrompt()">重命名当前账本</button>
+    <button onclick="deleteProfile()">删除当前账本</button>
+
+    <label>年份:
+      <select id="yearSelect" onchange="switchYear()"></select>
+    </label>
+
+    <label>月份:
+      <select id="monthSelect" onchange="switchMonth()">
+        <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+        <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+        <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+        <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+      </select>
+    </label>
+
+    <label>日期(日): <select id="daySelect"></select></label>
+    <label>备注: <input type="text" id="note" placeholder="可不填" /></label>
+
+    <label class="hidden">类型:
+      <select id="type"><option value="income">收入</option><option value="expense">支出</option></select>
+    </label>
+    <label>金额: <input type="number" id="amount" step="0.01" placeholder="输入后回车添加" /></label>
+    <button onclick="addRecord()">添加记录</button>
+  </div>
+
+  <!-- 筛选 -->
+  <div id="filters" class="flex">
+    <div>
+      <label>筛选分类:
+        <select id="filterCategory" onchange="renderTable()"></select>
+      </label>
+    </div>
+    <div><label>备注关键词: <input id="searchText" oninput="renderTable()" placeholder="输入关键字" /></label></div>
+    <button onclick="clearFilters()">清空筛选</button>
+  </div>
+
+  <!-- 本月汇总 -->
+  <div id="summary"></div>
+
+  <!-- 本月图表 -->
+  <div id="monthCharts" class="charts">
+    <div class="card">
+      <h3>📈 本月日度趋势（收入 / 支出 / 结余）</h3>
+      <canvas id="monthLineChart"></canvas>
+      <div class="tip">提示：勾选“累计趋势”查看从月初到当日的累计曲线。</div>
+    </div>
+    <div class="card">
+      <h3>📊 本月支出分类分布</h3>
+      <canvas id="monthBarChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 列表 -->
+  <div class="list-toggle">
+    <button id="toggleBtn" onclick="toggleCollapse()">展开全部</button>
+    <div class="info" id="listInfo">正在统计…</div>
+  </div>
+  <table id="recordsTable"><thead><tr><th>日期</th><th>分类</th><th>备注</th><th>类型</th><th>金额</th><th>操作</th></tr></thead><tbody></tbody></table>
+
+  <!-- 年度图表 -->
+  <div class="charts">
+    <div class="card"><h3>📈 年度月度趋势（收入 / 支出 / 结余）</h3><canvas id="lineChart"></canvas></div>
+    <div class="card"><h3>📊 年度支出分类对比</h3><canvas id="barChart"></canvas></div>
+  </div>
+
+  <script>
+    // 示例的交互脚本
+    function switchProfile() { console.log("Switching Profile"); }
+    function createProfile() { console.log("Creating new profile"); }
+    function renameProfilePrompt() { console.log("Renaming profile"); }
+    function deleteProfile() { console.log("Deleting profile"); }
+    function switchYear() { console.log("Switching year"); }
+    function switchMonth() { console.log("Switching month"); }
+    function addRecord() { console.log("Adding record"); }
+    function renderTable() { console.log("Rendering table"); }
+    function clearFilters() { console.log("Clearing filters"); }
+    function toggleCollapse() { console.log("Toggling collapse"); }
+  </script>
+</body>
+</html>
