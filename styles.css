@@ -1,3 +1,4 @@
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -19,11 +20,17 @@ body {
 
 .control-btn {
   margin-right: 10px;
-  padding: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+.control-btn:hover {
+  background-color: #0056b3;
 }
 
 .month-select {
@@ -42,6 +49,12 @@ body {
   display: flex;
   justify-content: space-around;
   margin-bottom: 20px;
+  gap: 20px;
+}
+
+#monthly-chart, #yearly-chart {
+  width: 48%;
+  height: 300px;
 }
 
 .record-list {
